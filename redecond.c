@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#define Trede 1000 //tamanho da rede
-#define TNe 1000//quant de neuronios excitadores
+#define Trede 100 //tamanho da rede
+#define TNe 100//quant de neuronios excitadores
 #define TNi (Trede-TNe) //quant de neuronios inibidores
 #define TEMPO 1000 //número de operações da simulação
 #define Napse 40 //numero de sinapses por neuronio
-#define t 1 //constante de decaimento
+#define t 3 //constante de decaimento da condutancia(1/t)
 
 double randn (double mu, double sigma){
   double U1, U2, W, mult;
@@ -59,12 +59,12 @@ void main(int argc, char const *argv[]) {
     u[i]=v[i]*b[i];
     Ia[i]=Ip[i]=0;
     for (j=0;j<TNe;j++) {W[i][j]=0.5*drand48();}
-    for (;j<Trede;j++) {W[i][j]=-drand48();}
+    for (j=TNe;j<Trede;j++) {W[i][j]=-drand48();}
     W[i][i]=0;
     // Constroi as sinapses:
     for (j=0;j<Napse;j++) {
       //S[i][j]=rand()%Trede;
-      S[i][j]=(Trede*(rand()%100))/100;
+      S[i][j]=(int)(Trede*(rand()%100))/100;
       G[i][j]=0;
     }
   }
@@ -84,7 +84,7 @@ void main(int argc, char const *argv[]) {
     }
     //Entrada aleatoria para os neuronios:
     for (i=0;i<TNe;i++) Ia[i]=5*randn(0,1);
-    for (;i<Trede;i++) Ia[i]=2*randn(0,1);
+    for (i=TNe;i<Trede;i++) Ia[i]=2*randn(0,1);
     //Atualiza matriz de condutancia(G):
     for (i=0;i<Trede;i++) {
       for (j=0;j<Napse;j++) {
